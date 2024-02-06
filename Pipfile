@@ -7,6 +7,10 @@ name = "pypi"
 pytest = "*"
 requests = "*"
 pypdf = "*"
+fitz = "*"
+pymupdf = "*"
+pdfplumber = "*"
+"pdfminer.six" = "*"
 
 [dev-packages]
 
