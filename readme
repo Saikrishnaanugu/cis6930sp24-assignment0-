@@ -1,9 +1,10 @@
-# cis6930sp24 -- Assignment0 -- Template
+# cis6930sp24 -- Assignment0
 
 ## Name:
 Sai Krishna Anugu
+UFID: 42266064
 
-## Assignment Description (in your own words)
+## Assignment Description 
 Assignment0 for the CIS6930 course involves creating a Python script to streamline the collection of incident summary data from the Norman Police Department's website. The script should download incident PDFs, extract relevant details, store them in an SQLite database, and provide summary information. Comprehensive unit tests and clear documentation are essential to ensure code quality.
 
 ## How to install
@@ -39,4 +40,17 @@ The database operations include creating the table and inserting incident data.
 - It is assumed that the database path provided is valid, and the user has the necessary permissions to create and modify the database.
 - No specific error handling for network issues or invalid URLs is implemented in this script.
 - The script assumes that the incident data in the PDF follows a specific format, and any deviation from the format may lead to incorrect results.
+
+## Test cases
+test_extract_incidents_empty_pdf
+ Validates that the extract_incidents function can handle an empty PDF file without throwing errors or extracting non-existent data.
+ This test case creates a temporary, empty PDF file and passes it to the extract_incidents function. It then asserts that the function returns an empty list, indicating that no incidents were found or erroneously extracted from the empty file. This test ensures the resilience of the function when encountering PDFs that have no content.
+
+test_extract_incidents_invalid_pdf
+ Ensures that the extract_incidents function can gracefully handle a file that is not formatted as a valid PDF.
+ In this test case, a temporary file is created with a .pdf extension but contains plain text data that does not conform to the PDF file specification. The file is then passed to the extract_incidents function. The test verifies that the function returns an empty list, confirming that it does not attempt to extract incident data from an improperly formatted file. This test is crucial for maintaining the robustness of the application against files that may be mislabeled or corrupted.
+
+pdf_path_with_data 
+ Provides a reusable test fixture for creating a temporary PDF file with predefined incident data.
+ This fixture creates a temporary directory and a test PDF file within it, populated with a set of sample incident data. The fixture yields the path to the temporary PDF file, which can be used in multiple tests that require a PDF with predictable content. This is a setup step to facilitate testing the extract_incidents function with a known data set.
 
