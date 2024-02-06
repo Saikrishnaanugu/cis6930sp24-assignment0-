@@ -186,7 +186,7 @@ def summarize_data(db_path):
     finally:
         conn.close()
 
-def main(incidents_url, db_path="normanpd.db"):  # Set a default database path
+def main(incidents_url, db_path="resources/normanpd.db"):  # Set a default database path
     if download_pdf(incidents_url, "incident_report.pdf"):
         incidents = extract_incidents("incident_report.pdf")
         create_db(db_path)
@@ -196,7 +196,7 @@ def main(incidents_url, db_path="normanpd.db"):  # Set a default database path
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--incidents", type=str, required=True, help="Incident summary URL")
-    parser.add_argument("--db", type=str, help="Database path (optional)", default="normanpd.db")  # Make --db optional
+    parser.add_argument("--db", type=str, help="Database path (optional)", default="resources/normanpd.db")  # Make --db optional
     args = parser.parse_args()
 
     main(args.incidents, args.db)
