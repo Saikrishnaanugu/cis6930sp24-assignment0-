@@ -155,13 +155,24 @@ def create_db(db_path):
     finally:
         conn.close()
 
+# def insert_incidents(db_path, incidents):
+#     try:
+#         conn = sqlite3.connect(db_path)
+#         cur = conn.cursor()
+#         for incident in incidents:
+#             query = "INSERT INTO incidents (date_time, incident_number, location, nature, incident_ori) VALUES (?, ?, ?, ?, ?)"
+#             cur.execute(query, incident)
+#         conn.commit()
+#     except sqlite3.DatabaseError as e:
+#         print(f"Failed to insert incidents: {e}")
+#     finally:
+#         conn.close()
 def insert_incidents(db_path, incidents):
     try:
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
-        for incident in incidents:
-            query = "INSERT INTO incidents (date_time, incident_number, location, nature, incident_ori) VALUES (?, ?, ?, ?, ?)"
-            cur.execute(query, incident)
+        query = "INSERT INTO incidents (date_time, incident_number, location, nature, incident_ori) VALUES (?, ?, ?, ?, ?)"
+        cur.executemany(query, incidents)
         conn.commit()
     except sqlite3.DatabaseError as e:
         print(f"Failed to insert incidents: {e}")
