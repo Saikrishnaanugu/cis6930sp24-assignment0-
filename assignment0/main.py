@@ -1,8 +1,7 @@
-
 # import argparse
 # import sqlite3
 # import requests
-# from pypdf import PdfReader  
+# from pypdf import PdfReader
 
 # def download_pdf(url, filename):
 #     try:
@@ -22,9 +21,9 @@
 #     incidents = []
 #     try:
 #         with open(pdf_path, 'rb') as file:
-#             reader = PdfReader(file)  # Assuming PdfReader is the correct class name in pypdf
-#             for page in reader.pages:  # Assuming pypdf has a similar pages iterable
-#                 text = page.extract_text()  # Assuming pypdf pages have an extract_text() method
+#             reader = PdfReader(file)
+#             for page in reader.pages:
+#                 text = page.extract_text()
 #                 if text:
 #                     lines = text.split('\n')
 #                     for line in lines:
@@ -39,6 +38,8 @@
 #     except Exception as e:
 #         print(f"Failed to extract incidents from PDF: {e}")
 #     return incidents
+
+
 
 # def create_db(db_path):
 #     try:
@@ -85,7 +86,7 @@
 #     finally:
 #         conn.close()
 
-# def main(incidents_url, db_path):
+# def main(incidents_url, db_path="resources/normanpd.db"):  # Set a default database path
 #     if download_pdf(incidents_url, "incident_report.pdf"):
 #         incidents = extract_incidents("incident_report.pdf")
 #         create_db(db_path)
@@ -95,7 +96,7 @@
 # if __name__ == "__main__":
 #     parser = argparse.ArgumentParser()
 #     parser.add_argument("--incidents", type=str, required=True, help="Incident summary URL")
-#     parser.add_argument("--db", type=str, required=True, help="Database path")
+#     parser.add_argument("--db", type=str, help="Database path (optional)", default="resources/normanpd.db")  # Make --db optional
 #     args = parser.parse_args()
 
 #     main(args.incidents, args.db)
@@ -108,12 +109,9 @@ from pypdf import PdfReader
 def download_pdf(url, filename):
     try:
         response = requests.get(url)
-        if response.status_code == 200:
-            with open(filename, 'wb') as file:
-                file.write(response.content)
-        else:
-            print(f"Failed to download the PDF. Status code: {response.status_code}")
-            return False
+        response.raise_for_status()  # Raise an exception if the request fails
+        with open(filename, 'wb') as file:
+            file.write(response.content)
     except requests.RequestException as e:
         print(f"Request failed: {e}")
         return False
@@ -186,17 +184,20 @@ def summarize_data(db_path):
     finally:
         conn.close()
 
-def main(incidents_url, db_path="resources/normanpd.db"):  # Set a default database path
+def main(incidents_url, db_path="resources/normanpd.db"):
     if download_pdf(incidents_url, "incident_report.pdf"):
         incidents = extract_incidents("incident_report.pdf")
-        create_db(db_path)
-        insert_incidents(db_path, incidents)
-        summarize_data(db_path)
+        if incidents:
+            create_db(db_path)
+            insert_incidents(db_path, incidents)
+            summarize_data(db_path)
+        else:
+            print("No incidents found in the PDF.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--incidents", type=str, required=True, help="Incident summary URL")
-    parser.add_argument("--db", type=str, help="Database path (optional)", default="resources/normanpd.db")  # Make --db optional
+    parser.add_argument("--db", type=str, help="Database path (optional)", default="resources/normanpd.db")
     args = parser.parse_args()
 
     main(args.incidents, args.db)
