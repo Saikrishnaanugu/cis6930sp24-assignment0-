@@ -1,0 +1,2 @@
+Srinivas Pavan | srunval@ufl.edu | Helped me with my database where the data is being filled in wrong columns because of irregular spaces.
+Shashank Kandaala | s.kandaala@ufl.edu | Helped me with the pypdf package and its benifits of reading the data vertically

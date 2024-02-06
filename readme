@@ -1,0 +1,42 @@
+# cis6930sp24 -- Assignment0 -- Template
+
+## Name:
+Sai Krishna Anugu
+
+## Assignment Description (in your own words)
+Assignment0 for the CIS6930 course involves creating a Python script to streamline the collection of incident summary data from the Norman Police Department's website. The script should download incident PDFs, extract relevant details, store them in an SQLite database, and provide summary information. Comprehensive unit tests and clear documentation are essential to ensure code quality.
+
+## How to install
+To set up the project environment, follow these steps:
+1. Install Pipenv if you don't have it already.
+2. Install project dependencies using Pipenv.
+
+## How to run
+pipenv run python main.py --url <incident_summary_url> --db <database_path>
+python assignment0/main.py --url https://www.normanok.gov/sites/default/files/documents/2024-01/2024-01-01_daily_incident_summary.pdf --db your_db
+
+## Functions
+### main.py
+- `extractincidents(url)`: This function takes an incident summary URL, downloads the PDF, extracts incident data, and inserts it into a database.
+- `download_pdf(url, filename)`: Downloads a PDF file from a given URL and saves it with the specified filename.
+- `create_db(db_path)`: Creates an SQLite database at the specified path.
+- `insert_incidents(db_path, incidents)`: Inserts incident data into the SQLite database.
+- `summarize_data(db_path)`: Retrieves and prints incident counts from the database.
+
+## Database Development
+The SQLite database has a table named "incidents" with the following schema:
+
+- `date_time TEXT`
+- `incident_number TEXT`
+- `location TEXT`
+- `nature TEXT`
+- `incident_ori TEXT`
+
+The database operations include creating the table and inserting incident data.
+
+## Bugs and Assumptions
+- The script assumes that the incident summary data is available at the provided URL in a PDF format.
+- It is assumed that the database path provided is valid, and the user has the necessary permissions to create and modify the database.
+- No specific error handling for network issues or invalid URLs is implemented in this script.
+- The script assumes that the incident data in the PDF follows a specific format, and any deviation from the format may lead to incorrect results.
+
