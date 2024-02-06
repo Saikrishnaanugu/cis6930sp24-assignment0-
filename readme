@@ -1,10 +1,10 @@
-# cis6930sp24 -- Assignment0
+# cis6930sp24 -- Assignment0 
 
 ## Name:
 Sai Krishna Anugu
 UFID: 42266064
 
-## Assignment Description 
+## Assignment Description
 Assignment0 for the CIS6930 course involves creating a Python script to streamline the collection of incident summary data from the Norman Police Department's website. The script should download incident PDFs, extract relevant details, store them in an SQLite database, and provide summary information. Comprehensive unit tests and clear documentation are essential to ensure code quality.
 
 ## How to install
@@ -13,7 +13,7 @@ To set up the project environment, follow these steps:
 2. Install project dependencies using Pipenv.
 
 ## How to run
-pipenv run python main.py --url <incident_summary_url> 
+pipenv run python main.py --incidents <url>
 pipenv run python assignment0/main.py --incidents "https://www.normanok.gov/sites/default/files/documents/2024-01/2024-01-01_daily_incident_summary.pdf" 
 
 ## Functions
@@ -24,7 +24,7 @@ pipenv run python assignment0/main.py --incidents "https://www.normanok.gov/site
 - `insert_incidents(db_path, incidents)`: Inserts incident data into the SQLite database.
 - `summarize_data(db_path)`: Retrieves and prints incident counts from the database.
 
-## Database Development
+## Database Development(normandb)
 The SQLite database has a table named "incidents" with the following schema:
 
 - `date_time TEXT`
@@ -53,4 +53,3 @@ test_extract_incidents_invalid_pdf
 pdf_path_with_data 
  Provides a reusable test fixture for creating a temporary PDF file with predefined incident data.
  This fixture creates a temporary directory and a test PDF file within it, populated with a set of sample incident data. The fixture yields the path to the temporary PDF file, which can be used in multiple tests that require a PDF with predictable content. This is a setup step to facilitate testing the extract_incidents function with a known data set.
-
