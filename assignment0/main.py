@@ -101,6 +101,20 @@
 
 #     main(args.incidents, args.db)
 
+# def insert_incidents(db_path, incidents):
+#     try:
+#         conn = sqlite3.connect(db_path)
+#         cur = conn.cursor()
+#         for incident in incidents:
+#             query = "INSERT INTO incidents (date_time, incident_number, location, nature, incident_ori) VALUES (?, ?, ?, ?, ?)"
+#             cur.execute(query, incident)
+#         conn.commit()
+#     except sqlite3.DatabaseError as e:
+#         print(f"Failed to insert incidents: {e}")
+#     finally:
+#         conn.close()
+
+
 import argparse
 import sqlite3
 import requests
@@ -155,18 +169,7 @@ def create_db(db_path):
     finally:
         conn.close()
 
-# def insert_incidents(db_path, incidents):
-#     try:
-#         conn = sqlite3.connect(db_path)
-#         cur = conn.cursor()
-#         for incident in incidents:
-#             query = "INSERT INTO incidents (date_time, incident_number, location, nature, incident_ori) VALUES (?, ?, ?, ?, ?)"
-#             cur.execute(query, incident)
-#         conn.commit()
-#     except sqlite3.DatabaseError as e:
-#         print(f"Failed to insert incidents: {e}")
-#     finally:
-#         conn.close()
+
 def insert_incidents(db_path, incidents):
     try:
         conn = sqlite3.connect(db_path)
@@ -183,17 +186,19 @@ def summarize_data(db_path):
     try:
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
+        # Ensure the ordering is by count DESC and then by nature ASC
         cur.execute('''SELECT nature, COUNT(*) as count 
                        FROM incidents 
                        GROUP BY nature 
-                       ORDER BY count DESC, nature''')
+                       ORDER BY count DESC, nature ASC''')
         rows = cur.fetchall()
         for row in rows:
-            print(f"{row[0]}|{row[1]}")
+            print(f"{row[0]}|{row[1]}")  # This should print nature|count with no extra characters
     except sqlite3.DatabaseError as e:
         print(f"Failed to summarize data: {e}")
     finally:
         conn.close()
+
 
 def main(incidents_url, db_path="resources/normanpd.db"):
     if download_pdf(incidents_url, "incident_report.pdf"):
