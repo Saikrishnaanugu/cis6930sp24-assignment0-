@@ -12,7 +12,7 @@ To set up the project environment, follow these steps:
 2. Install project dependencies using Pipenv.
 
 ## How to run
-pipenv run python main.py --url <incident_summary_url> --db <database_path>
+pipenv run python main.py --url <incident_summary_url> 
 pipenv run python assignment0/main.py --incidents "https://www.normanok.gov/sites/default/files/documents/2024-01/2024-01-01_daily_incident_summary.pdf" 
 
 ## Functions
