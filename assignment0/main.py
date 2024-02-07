@@ -40,68 +40,6 @@ def download_pdf(url):
         f.write(response.content)
 
 # Extract function
-# def extract_incidents(pdf_path):
-#     reader = PdfReader(pdf_path)
-#     incidents = []
-#     start_indices = []
-#     found_indices = False
-    
-#     for page in reader.pages:
-#         text = page.extract_text(extraction_mode="layout", layout_mode_space_vertically=False)
-#         lines = text.split('\n')
-#         incidents.extend(lines)
-        
-#     # Remove unwanted lines
-#     del incidents[:3]
-#     del incidents[-1]
-
-#     # Find starting indices of each column by analyzing the first 10 lines
-#     for line in incidents[:10]:
-#         if not found_indices:
-#             start_indices = [0] if not line[0].isspace() else []  # Start with 0 if the first character is non-space
-#             space_count = 0
-            
-#             for i in range(1, len(line)):  # Start from the second character
-#                 if line[i].isspace():
-#                     space_count += 1
-#                 else:
-#                     if space_count > 2:  # More than two spaces indicate a new column
-#                         start_indices.append(i)
-#                     space_count = 0  # Reset space count after a non-space character
-                    
-#                 if len(start_indices) == 5:  # Found all start indices
-#                     found_indices = True
-#                     break
-
-
-#     if not found_indices:
-#         raise ValueError("Unable to determine column start indices from the PDF.")
-
-#     newincidents = []
-
-#     # Now, use the detected start_indices to split the incidents
-#     for row in incidents:
-#         # Initially split the row based on your existing logic
-#         row_data = [cell.strip() for cell in row.split('  ') if cell.strip()]
-        
-#         # If there are less than 5 columns, check for missing columns using start_indices
-#         if len(row_data) < 5:
-#             corrected_row = []
-#             for index, start in enumerate(start_indices):
-#                 if index < len(row_data):
-#                     # Check if the current segment starts at the expected index
-#                     if row.find(row_data[index]) >= start:
-#                         corrected_row.append(row_data[index])
-#                     else:
-#                         corrected_row.append("")  # Insert empty string for missing column
-#                         row_data.insert(index, "")  # Adjust row_data to align with remaining columns
-#                 else:
-#                     corrected_row.append("")  # Append empty strings for completely missing columns at the end
-#             newincidents.append(corrected_row)
-#         else:
-#             newincidents.append(row_data)
-    
-#     return newincidents
 def extract_incidents(pdf_path):
     reader = PdfReader(pdf_path)
     incidents = []
@@ -149,25 +87,22 @@ def extract_incidents(pdf_path):
         # If there are less than 5 columns, check for missing columns using start_indices
         if len(row_data) < 5:
             corrected_row = []
-            current_column = 0
             for index, start in enumerate(start_indices):
                 if index < len(row_data):
                     # Check if the current segment starts at the expected index
-                    if row.find(row_data[index], start) == start:
-                        # Add the segment to the current column
+                    if row.find(row_data[index]) >= start:
                         corrected_row.append(row_data[index])
-                        current_column += 1
                     else:
-                        # Append the segment to the previous column
-                        corrected_row[current_column - 1] += f" {row_data[index]}"
+                        corrected_row.append("")  # Insert empty string for missing column
+                        row_data.insert(index, "")  # Adjust row_data to align with remaining columns
                 else:
-                    # Append an empty string for missing columns
-                    corrected_row.append("")
+                    corrected_row.append("")  # Append empty strings for completely missing columns at the end
             newincidents.append(corrected_row)
         else:
             newincidents.append(row_data)
     
     return newincidents
+
 
 
 # Status function 
