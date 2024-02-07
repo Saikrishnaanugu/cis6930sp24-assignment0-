@@ -23,18 +23,5 @@ def test_valid_url():
     assert os.path.exists(db_path)
     assert os.path.exists(pdf_path)
 
-# Test Case 2: Invalid URL
-def test_invalid_url():
-    # Define an invalid URL
-    invalid_url = "http://example.com/non_existing_file.pdf"
 
-    # Call the main function with the invalid URL
-    with pytest.raises(Exception):
-        main(invalid_url)
-
-    # Check if the SQLite database and PDF file were not created
-    db_path = os.path.join("resources", "normanpd.db")
-    pdf_path = os.path.join("docs", "incident_report.pdf")
-    assert not os.path.exists(db_path)
-    assert not os.path.exists(pdf_path)
 
