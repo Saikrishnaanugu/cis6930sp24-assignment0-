@@ -4,7 +4,7 @@ import sqlite3
 from unittest.mock import patch
 import pytest
 
-from assignment0.main import create_db, insert_incidents, download_pdf, extract_incidents, summarize_data, main
+from assignment0.main import database_creation_sqlite, incidents_insertion, pdf_file_download, incidents_extractions_db, actions_data, main
 
 # Create a temporary directory for testing
 TEMP_DIR = tempfile.gettempdir()

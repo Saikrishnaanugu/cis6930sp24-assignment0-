@@ -18,11 +18,26 @@ pipenv run python assignment0/main.py --incidents "https://www.normanok.gov/site
 
 ## Functions
 ### main.py
-- `extractincidents(url)`: This function takes an incident summary URL, downloads the PDF, extracts incident data, and inserts it into a database.
-- `download_pdf(url, filename)`: Downloads a PDF file from a given URL and saves it with the specified filename.
-- `create_db(db_path)`: Creates an SQLite database at the specified path.
-- `insert_incidents(db_path, incidents)`: Inserts incident data into the SQLite database.
-- `summarize_data(db_path)`: Retrieves and prints incident counts from the database.
+- database_creation_sqlite(db_path):
+This function creates a SQLite database file at the specified path if it doesn't already exist. It defines a table structure named 'incidents' with columns for date/time, incident number, location, nature, and incident origin.
+
+- incidents_insertion(db_path, incidents):
+Inserts incident data into the 'incidents' table of the SQLite database located at the specified path. It first clears any existing data in the table and then inserts each incident from the provided list.
+
+- pdf_file_download(url):
+Downloads a PDF file from the given URL and saves it to the local filesystem at the path './docs/incident_report.pdf'.
+
+- incidents_extractions_db(pdf_path):
+Extracts incident data from the PDF file located at the specified path. It parses the text content of each page, identifies the structure of incident data, and returns it as a list of incident records.
+
+- actions_data(db_path):
+Retrieves and summarizes incident data stored in the SQLite database located at the specified path. It prints the count of non-empty nature categories and the count of incidents with an empty nature field.
+
+- database_output(db_path):
+Fetches all incident data from the SQLite database located at the specified path and prints it to the console.
+
+- main(url):
+This is the main entry point of the script. It coordinates the entire process by downloading the PDF file from the provided URL, extracting incident data, storing it in the SQLite database, and summarizing the data.
 
 ## Database Development(normandb)
 The SQLite database has a table named "incidents" with the following schema:
@@ -35,11 +50,29 @@ The SQLite database has a table named "incidents" with the following schema:
 
 The database operations include creating the table and inserting incident data.
 
-## Bugs and Assumptions
-- The script assumes that the incident summary data is available at the provided URL in a PDF format.
-- It is assumed that the database path provided is valid, and the user has the necessary permissions to create and modify the database.
-- No specific error handling for network issues or invalid URLs is implemented in this script.
-- The script assumes that the incident data in the PDF follows a specific format, and any deviation from the format may lead to incorrect results.
+## Bugs
+- Database Injection Vulnerability:
+The incidents_insertion function uses string interpolation to construct SQL queries, which can lead to SQL injection vulnerabilities if the incident data contains unescaped characters. Using parameterized queries or sanitizing inputs would mitigate this risk.
+
+- PDF Parsing Issues:
+The incidents_extractions_db function relies on heuristics to detect the start indices of each column in the PDF text. If the PDF format or layout changes, or if there are inconsistencies in the text structure, the parsing logic may fail to accurately extract incident data.
+
+- Empty Nature Detection:
+The logic for detecting empty nature fields in the actions_data function assumes that empty nature fields will have an empty string value. If the data contains other representations of empty fields (such as whitespace or null values), these may not be correctly identified.
+
+## Assumptions:
+
+- PDF Structure Consistency:
+The code assumes that the structure of the incident data within the PDF remains consistent across different reports. Any changes in the layout or format of the PDF may require adjustments to the parsing logic.
+
+- SQLite Database Usage:
+The code assumes that SQLite is the appropriate database management system for storing incident data. Depending on the scalability and concurrency requirements, a different database solution might be more suitable.
+
+- Network Availability:
+The code assumes that the URL provided for downloading the PDF file is accessible and that the download operation will succeed. If the network connection is unstable or the URL is incorrect, the download process may fail.
+
+- PDF Text Extraction Accuracy:
+The code assumes that the text extraction process from the PDF accurately captures all incident data without any loss or misinterpretation. Variations in PDF formatting or text encoding could potentially lead to errors in data extraction.
 
 ## Test cases
 Valid URL Test Case (test_valid_url):
