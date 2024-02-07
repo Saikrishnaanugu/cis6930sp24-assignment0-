@@ -16,8 +16,6 @@ def pdf_path_with_data():
             """)
         yield pdf_path
 
-
-
 def test_extract_incidents_empty_pdf():
     # Test extracting incidents from an empty PDF file.
     with TemporaryDirectory() as temp_dir:
