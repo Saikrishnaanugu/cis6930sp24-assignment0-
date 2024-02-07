@@ -3,9 +3,6 @@ from tempfile import TemporaryDirectory
 import pytest
 from assignment0.main import extract_incidents
 
-
-
-
 @pytest.fixture
 def pdf_path_with_data():
     # Create a temporary directory and generate a test PDF file with sample incident data.
