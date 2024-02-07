@@ -11,6 +11,7 @@ fitz = "*"
 pymupdf = "*"
 pdfplumber = "*"
 "pdfminer.six" = "*"
+pypdf2 = "*"
 
 [dev-packages]
 
