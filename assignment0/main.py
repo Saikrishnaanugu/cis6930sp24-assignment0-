@@ -27,9 +27,9 @@ def insert_incidents(db_path, incidents):
     for incident in incidents:
         non_empty_fields = sum(1 for field in incident if field.strip())
         if non_empty_fields != 1:
-         query = f"INSERT INTO incidents (date_time, incident_number, location, nature, incident_ori) " \
+            query = f"INSERT INTO incidents (date_time, incident_number, location, nature, incident_ori) " \
                 f"VALUES ('{incident[0]}', '{incident[1]}', '{incident[2]}', '{incident[3]}', '{incident[4]}')"
-        cur.execute(query)
+            cur.execute(query)
     conn.commit()
     conn.close()
 
