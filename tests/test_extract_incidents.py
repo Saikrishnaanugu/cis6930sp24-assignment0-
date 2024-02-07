@@ -1,8 +1,8 @@
 import os
 from tempfile import TemporaryDirectory
 import pytest
+from pypdf import PdfWriter
 from assignment0.main import extract_incidents
-from PyPDF2 import PdfWriter
 
 @pytest.fixture
 def pdf_path_with_data():
@@ -10,14 +10,28 @@ def pdf_path_with_data():
     with TemporaryDirectory() as temp_dir:
         pdf_path = os.path.join(temp_dir, 'test_incidents.pdf')
         writer = PdfWriter()
-        writer.add_blank_page()
-        writer.add_blank_page()
+        writer.add_blank_page(200, 200)  # Add a blank page with width and height
         with open(pdf_path, 'wb') as pdf_file:
             writer.write(pdf_file)
         yield pdf_path
 
-def test_extract_incidents_valid_pdf(pdf_path_with_data):
-    # Test extracting incidents from a valid PDF file with content.
-    incidents = extract_incidents(pdf_path_with_data)
-    assert len(incidents) == 0  # Assuming the function returns an empty list for blank PDFs
+def test_extract_incidents_empty_pdf():
+    # Test extracting incidents from an empty PDF file.
+    with TemporaryDirectory() as temp_dir:
+        pdf_path = os.path.join(temp_dir, 'empty.pdf')
+        open(pdf_path, 'w').close()
+        incidents = extract_incidents(pdf_path)
+    
+    assert len(incidents) == 0
+
+def test_extract_incidents_invalid_pdf():
+    # Test extracting incidents from an invalid PDF file (non-PDF file).
+    with TemporaryDirectory() as temp_dir:
+        pdf_path = os.path.join(temp_dir, 'invalid.pdf')
+        with open(pdf_path, 'w') as pdf_file:
+            pdf_file.write("This is not a valid PDF file.")
+        incidents = extract_incidents(pdf_path)
+    
+    assert len(incidents) == 0
+
 
