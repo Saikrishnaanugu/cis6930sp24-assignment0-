@@ -12,7 +12,7 @@ TEMP_DIR = tempfile.gettempdir()
 # Test Case 1: Valid URL
 def test_valid_url():
     # Define a valid URL
-    valid_url = "http://example.com/incident_report.pdf"
+    valid_url = "https://www.normanok.gov/sites/default/files/documents/""2024-01/2024-01-01_daily_incident_summary.pdf"
 
     # Call the main function with the valid URL
     main(valid_url)
